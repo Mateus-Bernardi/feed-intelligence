@@ -17,4 +17,6 @@ public interface ArticleRepository extends JpaRepository<Article, UUID> {
             UUID userId, ArticleStatus status);
 
     Page<Article> findByUserIdOrderByCollectedAtDesc(UUID userId, Pageable pageable);
+
+    long countByStatus(ArticleStatus status);
 }
