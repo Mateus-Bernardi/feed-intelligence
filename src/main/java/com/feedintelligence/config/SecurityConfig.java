@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.*;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -19,6 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@EnableMethodSecurity
 public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
@@ -28,25 +30,29 @@ public class SecurityConfig {
         http
                 // Desativa CSRF — não precisamos com JWT stateless
                 .csrf(AbstractHttpConfigurer::disable)
-
-                // Sem sessão — JWT é stateless
+                .headers(headers -> headers.frameOptions(
+                        frame -> frame.sameOrigin())) // necessário para Swagger UI
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 // Define quem pode acessar o quê
                 .authorizeHttpRequests(auth -> auth
 
-                        // Rotas públicas
+                        // Rotas públicas de auth
                         .requestMatchers(HttpMethod.POST,
                                 "/auth/register",
                                 "/auth/login",
                                 "/auth/refresh"
                         ).permitAll()
 
-                        // Swagger (para documentação do portfólio)
+                        // Swagger — adiciona todas as variações de URL
                         .requestMatchers(
+                                "/swagger-ui.html",
                                 "/swagger-ui/**",
-                                "/v3/api-docs/**"
+                                "/v3/api-docs",
+                                "/v3/api-docs/**",
+                                "/swagger-resources/**",
+                                "/webjars/**"
                         ).permitAll()
 
                         // Somente admin
