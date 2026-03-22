@@ -107,6 +107,12 @@
             <version>0.12.6</version>
             <scope>runtime</scope>
         </dependency>
+        <!-- Rome RSS/Atom parser -->
+        <dependency>
+            <groupId>com.rometools</groupId>
+            <artifactId>rome</artifactId>
+            <version>2.1.0</version>
+        </dependency>
     </dependencies>
 
     <build>
