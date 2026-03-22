@@ -54,7 +54,7 @@ app:
     api-key: ${NEWS_API_KEY:placeholder}
 
   email:
-    from: digest@feedintelligence.com
+    from: onboarding@resend.dev
 
 logging:
   level:
