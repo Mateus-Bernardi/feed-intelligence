@@ -1,0 +1,70 @@
+spring:
+  application:
+    name: feed-intelligence
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/feedintelligence
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+  mail:
+    host: smtp.resend.com
+    port: 587
+    username: resend
+    password: ${RESEND_API_KEY:placeholder}
+
+app:
+  jwt:
+    secret: ${JWT_SECRET:dev-secret-key-must-be-at-least-32-chars-long}
+    expiration-ms: 900000
+    refresh-expiration-ms: 604800000
+
+  openrouter:
+    api-key: ${OPENROUTER_API_KEY:placeholder}
+    base-url: https://openrouter.ai/api/v1
+    model: stepfun/step-3.5-flash:free
+
+  gemini:
+    api-key: ${GEMINI_API_KEY:placeholder}
+    base-url: https://generativelanguage.googleapis.com/v1beta/models
+    model: gemini-2.5-flash
+
+  news-api:
+    api-key: ${NEWS_API_KEY:placeholder}
+
+  email:
+    from: onboarding@resend.dev
+
+  springdoc:
+    api-docs:
+      path: /v3/api-docs
+    swagger-ui:
+      path: /swagger-ui.html
+      tags-sorter: alpha
+      operations-sorter: alpha
+
+logging:
+  level:
+    com.feedintelligence: DEBUG
+    org.springframework.security: INFO
